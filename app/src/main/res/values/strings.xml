@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">GitHub Portifolio</string>
+    <string name="app_repositories">App Repositories</string>
 </resources>
