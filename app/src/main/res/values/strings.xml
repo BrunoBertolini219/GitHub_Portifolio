@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">GitHub Portifolio</string>
     <string name="app_repositories">App Repositories</string>
+    <string name="perquisar">Perquisar</string>
 </resources>
