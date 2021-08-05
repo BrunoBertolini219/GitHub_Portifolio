@@ -23,13 +23,18 @@ class RepoListAdapter: ListAdapter<Repo ,RepoListAdapter.RepolistViewHolder>(Dif
         return RepolistViewHolder(binding)
     }
 
+
+    override fun onBindViewHolder(holder: RepolistViewHolder, position: Int) {
+        holder.bind(getItem(position))
+    }
+
     inner class RepolistViewHolder(private val viewBinding: ItemRepoBinding) :
         RecyclerView.ViewHolder(viewBinding.root) {
         fun bind(item: Repo) {
             viewBinding.tvName.text = item.name
             viewBinding.tvDescription.text = item.description
             viewBinding.tvLanguage.text = item.language
-            viewBinding.chipStars.text = item.stargazers_count.toString()
+            viewBinding.chipStars.text = item.stargazersCount.toString()
 
             Glide.with(viewBinding.root.context)
                 .load(item.owner.avatar_url).into(viewBinding.ivUser)
@@ -38,9 +43,6 @@ class RepoListAdapter: ListAdapter<Repo ,RepoListAdapter.RepolistViewHolder>(Dif
 
     }
 
-    override fun onBindViewHolder(holder: RepolistViewHolder, position: Int) {
-        holder.bind(getItem(position))
-    }
 }
 
 class DiffCallback: DiffUtil.ItemCallback<Repo>(){

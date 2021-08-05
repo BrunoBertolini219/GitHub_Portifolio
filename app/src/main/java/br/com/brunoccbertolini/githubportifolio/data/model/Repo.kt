@@ -1,11 +1,15 @@
 package br.com.brunoccbertolini.githubportifolio.data.model
 
+import com.google.gson.annotations.SerializedName
+
 data class Repo(
-    val id: Int,
+    val id: Long,
     val name: String,
-    val description: String,
-    val language: String,
-    val htmlURL: String,
     val owner: Owner,
-    val stargazers_count: Int
+    @SerializedName("stargazers_count")
+    val stargazersCount: Long,
+    val language: String,
+    @SerializedName("html_url")
+    val htmlURL: String,
+    val description: String
 )

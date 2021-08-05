@@ -5,26 +5,45 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
-import android.widget.SearchView
-import androidx.lifecycle.LifecycleOwner
+import androidx.appcompat.widget.SearchView
+
 import br.com.brunoccbertolini.githubportifolio.R
+import br.com.brunoccbertolini.githubportifolio.core.createDialog
+import br.com.brunoccbertolini.githubportifolio.core.createProgressDialog
+import br.com.brunoccbertolini.githubportifolio.core.hideSoftKeyboard
 import br.com.brunoccbertolini.githubportifolio.databinding.ActivityMainBinding
-import br.com.brunoccbertolini.githubportifolio.presentation.MainViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
+    private val dialog by lazy { createProgressDialog() }
     private val viewModel by viewModel<MainViewModel>()
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
+    private val adapter by lazy { RepoListAdapter() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-
         setSupportActionBar(binding.toolbar)
 
-        viewModel.repo.observe(this){
+        binding.rvGit.adapter = adapter
 
+
+
+        viewModel.repo.observe(this){
+            when (it) {
+                is MainViewModel.State.Error -> {
+                    createDialog {
+                        setMessage(it.error.message)
+                    }.show()
+                    dialog.dismiss()
+                }
+                MainViewModel.State.Loading -> {dialog.show()}
+                is MainViewModel.State.Success -> {
+                    dialog.dismiss()
+                    adapter.submitList(it.list)
+                }
+            }
         }
 
     }
@@ -37,7 +56,8 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     }
 
     override fun onQueryTextSubmit(query: String?): Boolean {
-        Log.e(TAG, "onQueryTextSubmit: $query", )
+        query?.let { viewModel.getRepoList(it) }
+        binding.root.hideSoftKeyboard()
         return false
     }
 

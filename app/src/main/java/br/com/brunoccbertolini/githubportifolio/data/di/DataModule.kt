@@ -14,7 +14,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object DataModule {
-    private const val TAG = "okHttp"
+    private const val TAG = "OkHttp"
 
     fun load() {
         loadKoinModules(networkModules() + repositoriesModule())
@@ -54,6 +54,8 @@ object DataModule {
     private inline fun <reified T> createService(client: OkHttpClient, factory: GsonConverterFactory): T{
         return Retrofit.Builder()
             .baseUrl("https://api.github.com/")
+            .client(client)
+            .addConverterFactory(factory)
             .build()
             .create(T::class.java)
     }

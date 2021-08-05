@@ -1,4 +1,4 @@
-package br.com.brunoccbertolini.githubportifolio.presentation
+package br.com.brunoccbertolini.githubportifolio.ui
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -26,7 +26,6 @@ class MainViewModel(
                 }.catch {
                     _repo.postValue(State.Error(it))
                 }.collect {
-
                     _repo.postValue(State.Success(it))
                 }
         }
